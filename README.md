@@ -55,18 +55,24 @@ docker-compose build --force-rm --no-cache
 docker-compose up -d
 ```
 
-# API REQUEST EXAMPLES:
-### (Make sure to add Content-Type application/json to every request)
+# Api request examples:
+(Make sure to add Content-Type application/json to every request)
+```
 POST -> http://localhost:8084/api/v1/Auth/token | Payload: {"emailAddress": "admin@admin.com", "password": "admin"}
+
 Response -> {
     "accessToken": "[YOUR TOKEN]",
     "expiresIn": 10
 }
-
+```
+```
 GET -> http://localhost:8084/api/v1/Items | Authorization: Bearer [TOKEN RECEIVED BEFORE] 
-Response -> 200 {[Items, if any]}
 
+Response -> 200 {[Items, if any]}
+```
+```
 POST -> http://localhost:8084/api/v1/Items | Authorization: Bearer [TOKEN RECEIVED BEFORE] | Payload: {"name": "Burger", "description": "A delicious american burger", "categories": "Food", "colorCode": "#fd6d6d"}
+
 Response -> 201 {
     "name": "Burger",
     "description": "A delicious american burger",
@@ -78,4 +84,4 @@ Response -> 201 {
     "id": 1,
     "created": "2022-12-11T21:21:46.570839Z"
 }
-
+```
