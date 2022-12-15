@@ -5,6 +5,7 @@ namespace POSsystem.Contracts.Data
     public interface IUnitOfWork
     {
         IBranchRepository Branches { get; }
+        IBranchWorkingDaysRepository WorkingDays { get; }
         ICompanyRepository Companies { get; }
         ICustomerRepository Customers { get; }
         IDiscountRepository Discounts { get; }
@@ -13,6 +14,7 @@ namespace POSsystem.Contracts.Data
         IItemRepository Items { get; }
         IOrderRepository Orders { get; }
         IPurchasableItemRepository PurchasableItems { get; }
+        IRoleRepository Roles { get; }
         IServiceRepository Services { get; }
         IServiceReservationRepository ServiceReservations { get; }
         IUserRepository Users { get; }

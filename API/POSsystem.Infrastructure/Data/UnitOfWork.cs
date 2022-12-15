@@ -1,4 +1,5 @@
 ﻿using POSsystem.Contracts.Data;
+using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.Data.Repositories;
 using POSsystem.Core.Data.Repositories;
 using POSsystem.Migrations;
@@ -15,6 +16,8 @@ namespace POSsystem.Core.Data
         }
 
         public IBranchRepository Branches => new BranchRepository(_context);
+
+        public IBranchWorkingDaysRepository WorkingDays => new BranchWorkingDaysRepository(_context);
         
         public ICompanyRepository Companies => new CompanyRepository(_context);
         
@@ -32,6 +35,8 @@ namespace POSsystem.Core.Data
 
         public IPurchasableItemRepository PurchasableItems => new PurchasableItemRepository(_context);
 
+        public IRoleRepository Roles => new RoleRepository(_context);
+        
         public IServiceRepository Services => new ServiceRepository(_context);
 
         public IServiceReservationRepository ServiceReservations => new ServiceReservationRepository(_context);
