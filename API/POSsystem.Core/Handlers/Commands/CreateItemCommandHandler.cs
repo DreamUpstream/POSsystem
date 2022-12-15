@@ -54,7 +54,7 @@ namespace POSsystem.Core.Handlers.Commands
             {
                 Name = model.Name,
                 Description = model.Description,
-                Categories = model.Categories,
+                Category = _repository.ItemCategories.Get(model.CategoryId),
                 ColorCode = model.ColorCode
             };
 
