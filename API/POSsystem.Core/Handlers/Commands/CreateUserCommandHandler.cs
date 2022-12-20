@@ -1,10 +1,12 @@
-﻿using POSsystem.Contracts.Data;
+﻿using System.Security.Cryptography;
+using POSsystem.Contracts.Data;
 using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.DTO;
 using POSsystem.Contracts.Services;
 using POSsystem.Core.Exceptions;
 using FluentValidation;
 using MediatR;
+using POSsystem.Core.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
@@ -45,10 +47,12 @@ namespace POSsystem.Core.Handlers.Commands
                 };
             }
 
+            var salt = RandomNumberGenerator.GetBytes(128 / 8);
             var user = new User
             {
                 EmailAddress = model.EmailAddress,
-                Password = model.Password,
+                Password = PasswordHashingService.Hash(model.Password, salt),
+                Salt = salt,
                 Role = model.Role
             };
 

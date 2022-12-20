@@ -1,4 +1,5 @@
-﻿using POSsystem.Contracts.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Contracts.Data.Entities
 {
@@ -7,5 +8,6 @@ namespace POSsystem.Contracts.Data.Entities
         public string EmailAddress { get; set; }
         public UserRole Role { get; set; }
         public string Password { get; set; }
+        public byte[] Salt { get; set; }
     }
 }

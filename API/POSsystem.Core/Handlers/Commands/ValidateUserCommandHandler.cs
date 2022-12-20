@@ -4,6 +4,7 @@ using POSsystem.Contracts.Services;
 using POSsystem.Core.Exceptions;
 using FluentValidation;
 using MediatR;
+using POSsystem.Core.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
@@ -48,8 +49,8 @@ namespace POSsystem.Core.Handlers.Commands
             var entities = _repository.Users.GetAll().Where(x => x.EmailAddress == model.EmailAddress);
             if (!entities.Any()) throw new EntityNotFoundException($"No Users matching emailAddress {model.EmailAddress} found");
 
-            var user = entities.Where(x => x.Password == model.Password).FirstOrDefault();
-            if(user == null) throw new EntityNotFoundException($"Passwords donot match. Authentication Failed.");
+            var user = entities.Where(x => x.Password == PasswordHashingService.Hash(model.Password, x.Salt)).FirstOrDefault();
+            if(user == null) throw new EntityNotFoundException($"Passwords do not match. Authentication Failed.");
 
             return await Task.FromResult(_token.Generate(user));
         }

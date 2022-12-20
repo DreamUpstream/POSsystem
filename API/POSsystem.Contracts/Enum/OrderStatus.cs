@@ -2,5 +2,9 @@ namespace POSsystem.Contracts.Enum;
 
 public enum OrderStatus
 {
-    // values from 0-4 with no description :))))))
+    Created = 1,
+    Returned = 2,
+    PartiallyReturned = 3,
+    Completed = 4,
+    Canceled = 0
 }
