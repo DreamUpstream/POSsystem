@@ -4,8 +4,8 @@ namespace POSsystem.Contracts.Data.Entities;
 
 public class Order : AuditableEntity
 {
-    public DateTimeOffset SubmissionDate { get; set; }
-    public DateTimeOffset FulfilmentDate { get; set; }
+    public DateTime SubmissionDate { get; set; }
+    public DateTime FulfilmentDate { get; set; }
     public Decimal Tip { get; set; }
     public Boolean DeliveryRequired { get; set; }
     public string Comment { get; set; }
