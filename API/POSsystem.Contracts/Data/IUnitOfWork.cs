@@ -13,8 +13,6 @@ namespace POSsystem.Contracts.Data
         IItemCategoryRepository ItemCategories { get; }
         IItemRepository Items { get; }
         IOrderRepository Orders { get; }
-        IPurchasableItemRepository PurchasableItems { get; }
-        IRoleRepository Roles { get; }
         IServiceRepository Services { get; }
         IServiceReservationRepository ServiceReservations { get; }
         IUserRepository Users { get; }

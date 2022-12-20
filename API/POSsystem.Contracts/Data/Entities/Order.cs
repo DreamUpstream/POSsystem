@@ -14,6 +14,6 @@ public class Order : AuditableEntity
     public Employee Employee { get; set; }
     public Discount Discount { get; set; }
     public string Delivery { get; set; }
-    public List<PurchasableItem> Products { get; set; }
+    public List<Item> Products { get; set; }
     public List<Service> Services { get; set; }
 }

@@ -33,10 +33,6 @@ namespace POSsystem.Core.Data
 
         public IOrderRepository Orders => new OrderRepository(_context);
 
-        public IPurchasableItemRepository PurchasableItems => new PurchasableItemRepository(_context);
-
-        public IRoleRepository Roles => new RoleRepository(_context);
-        
         public IServiceRepository Services => new ServiceRepository(_context);
 
         public IServiceReservationRepository ServiceReservations => new ServiceReservationRepository(_context);

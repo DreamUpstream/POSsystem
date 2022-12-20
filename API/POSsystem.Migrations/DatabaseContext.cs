@@ -47,7 +47,6 @@ namespace POSsystem.Migrations
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<PurchasableItem> PurchasableItems { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceReservation> ServiceReservations { get; set; }
         public DbSet<Item> Items { get; set; }
