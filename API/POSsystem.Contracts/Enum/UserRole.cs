@@ -3,7 +3,8 @@
     public enum UserRole
     {
         Base = 1,
-        Admin = 2,
-        Owner = 3
+        Employee = 2,
+        Admin = 3,
+        Owner = 4
     }
 }
