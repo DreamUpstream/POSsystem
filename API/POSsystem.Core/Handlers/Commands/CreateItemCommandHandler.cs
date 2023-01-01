@@ -14,7 +14,7 @@ namespace POSsystem.Core.Handlers.Commands
         public CreateOrUpdateItemDTO Model { get; }
         public CreateItemCommand(CreateOrUpdateItemDTO model)
         {
-            this.Model = model;
+            Model = model;
         }
     }
 
@@ -54,7 +54,7 @@ namespace POSsystem.Core.Handlers.Commands
             {
                 Name = model.Name,
                 Description = model.Description,
-                Category = _repository.ItemCategories.Get(model.CategoryId),
+                CategoryId = model.CategoryId,
                 ColorCode = model.ColorCode
             };
 

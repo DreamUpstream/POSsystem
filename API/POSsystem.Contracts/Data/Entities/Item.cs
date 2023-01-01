@@ -1,4 +1,5 @@
-﻿using POSsystem.Contracts.Enum;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Contracts.Data.Entities
 {
@@ -8,8 +9,10 @@ namespace POSsystem.Contracts.Data.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public ItemStatus Status { get; set; }
-        public ItemCategory Category { get; set; }
-        public Discount Discount { get; set; }
+        [ForeignKey("categories")]
+        public int CategoryId { get; set; }
+        [ForeignKey("discounts")]
+        public int DiscountId { get; set; }
         public string ColorCode { get; set; }
     }
 }

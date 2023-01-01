@@ -6,5 +6,5 @@ public enum OrderStatus
     Returned = 2,
     PartiallyReturned = 3,
     Completed = 4,
-    Canceled = 0
+    Canceled = 5
 }

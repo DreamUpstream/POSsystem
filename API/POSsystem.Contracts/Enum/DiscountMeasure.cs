@@ -2,6 +2,6 @@ namespace POSsystem.Contracts.Enum;
 
 public enum DiscountMeasure
 {
-    Percent = 0,
-    Money = 1
+    Percent = 1,
+    Money = 2
 }
