@@ -15,9 +15,9 @@ namespace POSsystem.Core.Data.Repositories
             _dbSet = _context.Set<T>();
         }
 
-        public void Add(T entity)
+        public T Add(T entity)
         {
-            _dbSet.Add(entity);
+            return _dbSet.Add(entity).Entity;
         }
 
         public int Count()

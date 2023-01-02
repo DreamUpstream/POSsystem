@@ -17,7 +17,7 @@ namespace POSsystem.Core.Data
 
         public IBranchRepository Branches => new BranchRepository(_context);
 
-        public IBranchWorkingDaysRepository WorkingDays => new BranchWorkingDaysRepository(_context);
+        public IBranchWorkingDayRepository BranchWorkingDays => new BranchWorkingDayRepository(_context);
         
         public ICompanyRepository Companies => new CompanyRepository(_context);
         
