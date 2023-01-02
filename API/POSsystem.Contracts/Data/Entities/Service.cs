@@ -15,4 +15,5 @@ public class Service : AuditableEntity
     public int DiscountId { get; set; }
     [ForeignKey("branches")]
     public int BranchId { get; set; }
+    public Order? Order { get; set; }
 }

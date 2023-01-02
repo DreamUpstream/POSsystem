@@ -12,23 +12,23 @@ using POSsystem.Core.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
-    public class CreateOrderCommand : IRequest<OrderDTO>
+    public class CreateOrderCommand : IRequest<CreateOrderDTO>
     {
-        public OrderDTO Model { get; }
-        public CreateOrderCommand(OrderDTO model)
+        public CreateOrderDTO Model { get; }
+        public CreateOrderCommand(CreateOrderDTO model)
         {
             Model = model;
         }
     }
 
-    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, OrderDTO>
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, CreateOrderDTO>
     {
         private readonly IUnitOfWork _repository;
-        private readonly IValidator<OrderDTO> _validator;
+        private readonly IValidator<CreateOrderDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateOrderCommandHandler> _logger;
 
-        public CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger, IUnitOfWork repository, IValidator<OrderDTO> validator, IMapper mapper)
+        public CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger, IUnitOfWork repository, IValidator<CreateOrderDTO> validator, IMapper mapper)
         {
             _repository = repository;
             _validator = validator;
@@ -36,9 +36,9 @@ namespace POSsystem.Core.Handlers.Commands
             _logger = logger;
         }
 
-        public async Task<OrderDTO> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<CreateOrderDTO> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            OrderDTO model = request.Model;
+            CreateOrderDTO model = request.Model;
 
             var result = _validator.Validate(model);
 
@@ -53,8 +53,8 @@ namespace POSsystem.Core.Handlers.Commands
                 };
             }
 
-            var items = _repository.Items.GetAll().Where(i => model.Products.Contains(i.Id)).ToList();
-            var services = _repository.Services.GetAll().Where(i => model.Services.Contains(i.Id)).ToList();
+            var items = _repository.Items.GetAll().Where(i => model.Products.Contains(i.Id));
+            var services = _repository.Services.GetAll().Where(i => model.Services.Contains(i.Id));
 
             var entity = new Order
             {
@@ -66,10 +66,11 @@ namespace POSsystem.Core.Handlers.Commands
                 CustomerId = model.CustomerId,
                 EmployeeId = model.EmployeeId,
                 DiscountId = model.DiscountId,
-                Delivery = model.Delivery,
-                Products = items,
-                Services = services
+                Delivery = model.Delivery
             };
+
+            entity.Products.AddRange(items);
+            entity.Services.AddRange(services);
 
             _repository.Orders.Add(entity);
             await _repository.CommitAsync();

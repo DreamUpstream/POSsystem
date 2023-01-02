@@ -68,7 +68,6 @@ namespace POSsystem.API.Controllers.V1
         {
             try
             {
-
                 var command = new CreateCustomerCommand(model);
                 var response = await _mediator.Send(command);
                 return StatusCode((int)HttpStatusCode.Created, response);
@@ -79,6 +78,14 @@ namespace POSsystem.API.Controllers.V1
                 {
                     IsSuccess = false,
                     Errors = ex.Errors
+                });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = new[] { ex.Message }
                 });
             }
         }

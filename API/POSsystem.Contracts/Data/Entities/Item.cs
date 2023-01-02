@@ -14,5 +14,6 @@ namespace POSsystem.Contracts.Data.Entities
         [ForeignKey("discounts")]
         public int DiscountId { get; set; }
         public string ColorCode { get; set; }
+        public Order? Order { get; set; }
     }
 }

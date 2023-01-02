@@ -29,7 +29,7 @@ namespace POSsystem.Controllers.V1
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Create([FromBody] EmployeeDTO model)
+        public async Task<IActionResult> Create([FromBody] CreateEmployeeDTO model)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace POSsystem.Controllers.V1
         [Route("{id}/update")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Update(int id, [FromBody] EmployeeDTO model)
+        public async Task<IActionResult> Update(int id, [FromBody] CreateEmployeeDTO model)
         {
             try
             {
@@ -147,6 +147,14 @@ namespace POSsystem.Controllers.V1
                 {
                     IsSuccess = false,
                     Errors = ex.Errors
+                });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = new string[] { ex.Message }
                 });
             }
         }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.Enum;
 using POSsystem.Contracts.Services;
+using POSsystem.Core.Services;
 
 namespace POSsystem.Migrations
 {
@@ -12,12 +13,12 @@ namespace POSsystem.Migrations
 
         public DatabaseContext(DbContextOptions<DatabaseContext> options, IUserService user) : base(options)
         {
-            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
             _user = user;
         }
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            
             foreach (var item in ChangeTracker.Entries<User>().AsEnumerable())
             {
                 if (item.State == EntityState.Added)
@@ -95,7 +96,9 @@ namespace POSsystem.Migrations
                 CustomerId = 1,
                 EmployeeId = 1,
                 DiscountId = 1,
-                Delivery = ""
+                Delivery = "",
+                Products = new List<Item>(),
+                Services = new List<Service>()
             });
 
             modelBuilder.Entity<Discount>().HasData(new Discount
@@ -168,13 +171,24 @@ namespace POSsystem.Migrations
                 DiscountId = 1
             });
 
+            var salt = RandomNumberGenerator.GetBytes(128 / 8);
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 1,
+                EmailAddress = "admin@admin.com",
+                Role = UserRole.Admin,
+                Password = PasswordHashingService.Hash("admin", salt),
+                Salt = salt
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 2,
                 EmailAddress = "email@trustable_email_service.ll",
                 Role = UserRole.Base,
-                Password = "password",
-                Salt = RandomNumberGenerator.GetBytes(128 / 8)
+                Password = PasswordHashingService.Hash("password", salt),
+                Salt = salt
             });
 
             modelBuilder.Entity<Service>().HasData(new Service()
@@ -222,6 +236,14 @@ namespace POSsystem.Migrations
                 CreatedBy = "DbContext",
                 Name = "Category 1"
             });
+
+            modelBuilder.Entity<Order>()
+                    .HasMany(x => x.Products)
+                    .WithOne(x => x.Order);
+            
+            modelBuilder.Entity<Order>()
+                    .HasMany(x => x.Services)
+                    .WithOne(x => x.Order);
         }
     }
 }

@@ -31,11 +31,24 @@ namespace POSsystem.Core.Handlers.Queries
             
             if (cachedEntitiesString == null)
             {
-                var entities = await Task.FromResult(_repository.Orders.GetAll().Where(x => x.Status == OrderStatus.Created));
-                var result = _mapper.Map<IEnumerable<OrderDTO>>(entities);
+                var dbEntities = await Task.FromResult(_repository.Orders.GetAll().Where(x => x.Status == OrderStatus.Created));
+                var entities = dbEntities.Select(x => new OrderDTO
+                {
+                    SubmissionDate = x.SubmissionDate,
+                    Tip = x.Tip,
+                    DeliveryRequired = x.DeliveryRequired,
+                    Comment = x.Comment,
+                    Status = x.Status,
+                    CustomerId = x.CustomerId,
+                    EmployeeId = x.EmployeeId,
+                    DiscountId = x.DiscountId,
+                    Delivery = x.Delivery,
+                    Products = x.Products.ToList(),
+                    Services = x.Services.ToList()
+                }).ToList();
 
-                await _cache.SetStringAsync("all_active_orders", JsonConvert.SerializeObject(result));
-                return result;
+                await _cache.SetStringAsync("all_active_orders", JsonConvert.SerializeObject(entities));
+                return entities;
             }
             else
             {

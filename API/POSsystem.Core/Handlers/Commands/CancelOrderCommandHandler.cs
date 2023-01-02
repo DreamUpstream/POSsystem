@@ -13,7 +13,7 @@ using POSsystem.Contracts.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
-    public class CancelOrderCommand : IRequest<OrderDTO>
+    public class CancelOrderCommand : IRequest<CreateOrderDTO>
     {
         public int Id { get; }
         public CancelOrderCommand(int id)
@@ -22,15 +22,15 @@ namespace POSsystem.Core.Handlers.Commands
         }
     }
 
-    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, OrderDTO>
+    public class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, CreateOrderDTO>
     {
         private readonly IUnitOfWork _repository;
-        private readonly IValidator<OrderDTO> _validator;
+        private readonly IValidator<CreateOrderDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ICachingService _cache;
         private readonly ILogger<CancelOrderCommandHandler> _logger;
 
-        public CancelOrderCommandHandler(ILogger<CancelOrderCommandHandler> logger, IUnitOfWork repository, IValidator<OrderDTO> validator, IMapper mapper, ICachingService cache)
+        public CancelOrderCommandHandler(ILogger<CancelOrderCommandHandler> logger, IUnitOfWork repository, IValidator<CreateOrderDTO> validator, IMapper mapper, ICachingService cache)
         {
             _repository = repository;
             _validator = validator;
@@ -39,7 +39,7 @@ namespace POSsystem.Core.Handlers.Commands
             _cache = cache;
         }
 
-        public async Task<OrderDTO> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public async Task<CreateOrderDTO> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
             var id = request.Id;
 
@@ -55,9 +55,9 @@ namespace POSsystem.Core.Handlers.Commands
             _repository.Orders.Update(dbEntity);
             await _repository.CommitAsync();
 
-            var updatedOrder = _mapper.Map<OrderDTO>(dbEntity);
+            var updatedOrder = _mapper.Map<CreateOrderDTO>(dbEntity);
 
-            if (_cache.GetItem<OrderDTO>($"order_{id}") != null)
+            if (_cache.GetItem<CreateOrderDTO>($"order_{id}") != null)
             {
                 _logger.LogInformation($"Order Exists in Cache. Set new Item for the same Key.");
                 _cache.SetItem($"order_{id}", updatedOrder);

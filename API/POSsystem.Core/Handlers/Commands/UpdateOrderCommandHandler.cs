@@ -13,26 +13,26 @@ using POSsystem.Contracts.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
-    public class UpdateOrderCommand : IRequest<OrderDTO>
+    public class UpdateOrderCommand : IRequest<CreateOrderDTO>
     {
         public int Id { get; }
-        public OrderDTO Model { get; }
-        public UpdateOrderCommand(int id, OrderDTO model)
+        public CreateOrderDTO Model { get; }
+        public UpdateOrderCommand(int id, CreateOrderDTO model)
         {
             Id = id;
             Model = model;
         }
     }
 
-    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, OrderDTO>
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, CreateOrderDTO>
     {
         private readonly IUnitOfWork _repository;
-        private readonly IValidator<OrderDTO> _validator;
+        private readonly IValidator<CreateOrderDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ICachingService _cache;
         private readonly ILogger<UpdateOrderCommandHandler> _logger;
 
-        public UpdateOrderCommandHandler(ILogger<UpdateOrderCommandHandler> logger, IUnitOfWork repository, IValidator<OrderDTO> validator, IMapper mapper, ICachingService cache)
+        public UpdateOrderCommandHandler(ILogger<UpdateOrderCommandHandler> logger, IUnitOfWork repository, IValidator<CreateOrderDTO> validator, IMapper mapper, ICachingService cache)
         {
             _repository = repository;
             _validator = validator;
@@ -41,9 +41,9 @@ namespace POSsystem.Core.Handlers.Commands
             _cache = cache;
         }
 
-        public async Task<OrderDTO> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<CreateOrderDTO> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
-            OrderDTO model = request.Model;
+            CreateOrderDTO model = request.Model;
             var id = request.Id;
 
             var result = _validator.Validate(model);
@@ -91,7 +91,7 @@ namespace POSsystem.Core.Handlers.Commands
                 _cache.SetItem($"order_{id}", updatedOrder);
             }
 
-            return updatedOrder;
+            return model;
         }
     }
 }

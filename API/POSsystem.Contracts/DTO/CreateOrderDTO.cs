@@ -3,7 +3,7 @@ using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Contracts.DTO
 {
-    public class OrderDTO
+    public class CreateOrderDTO
     {
         public DateTime SubmissionDate { get ; set; }
         public Decimal Tip { get ; set; }
@@ -14,7 +14,7 @@ namespace POSsystem.Contracts.DTO
         public int EmployeeId { get; set; }
         public int? DiscountId { get; set; }
         public string Delivery { get; set; }
-        public List<Item> Products { get; set; }
-        public List<Service> Services { get; set; }
+        public List<int> Products { get; set; }
+        public List<int> Services { get; set; }
     }
 }

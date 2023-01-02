@@ -14,7 +14,6 @@ using POSsystem.Contracts.Data.Entities;
 
 namespace POSsystem.Controllers.V1
 {
-    [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -29,7 +28,7 @@ namespace POSsystem.Controllers.V1
         [Route("create")]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Create([FromBody] OrderDTO model)
+        public async Task<IActionResult> Create([FromBody] CreateOrderDTO model)
         {
             try
             {
@@ -85,7 +84,7 @@ namespace POSsystem.Controllers.V1
 
         [MapToApiVersion("1.0")]
         [HttpGet]
-        [Route("get/AvailableItem")]
+        [Route("get/AvailableServices")]
         [ProducesResponseType(typeof(IEnumerable<ServiceDTO>), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> GetAllAvailableServices()
@@ -123,7 +122,7 @@ namespace POSsystem.Controllers.V1
         [Route("{id}/update")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Update(int id, [FromBody] OrderDTO model)
+        public async Task<IActionResult> Update(int id, [FromBody] CreateOrderDTO model)
         {
             try
             {

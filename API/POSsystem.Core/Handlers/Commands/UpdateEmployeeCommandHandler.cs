@@ -13,26 +13,26 @@ using POSsystem.Contracts.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
-    public class UpdateEmployeeCommand : IRequest<EmployeeDTO>
+    public class UpdateEmployeeCommand : IRequest<CreateEmployeeDTO>
     {
         public int Id { get; }
-        public EmployeeDTO Model { get; }
-        public UpdateEmployeeCommand(int id, EmployeeDTO model)
+        public CreateEmployeeDTO Model { get; }
+        public UpdateEmployeeCommand(int id, CreateEmployeeDTO model)
         {
             Id = id;
             Model = model;
         }
     }
 
-    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, EmployeeDTO>
+    public class UpdateEmployeeCommandHandler : IRequestHandler<UpdateEmployeeCommand, CreateEmployeeDTO>
     {
         private readonly IUnitOfWork _repository;
-        private readonly IValidator<EmployeeDTO> _validator;
+        private readonly IValidator<CreateEmployeeDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ICachingService _cache;
         private readonly ILogger<UpdateEmployeeCommandHandler> _logger;
 
-        public UpdateEmployeeCommandHandler(ILogger<UpdateEmployeeCommandHandler> logger, IUnitOfWork repository, IValidator<EmployeeDTO> validator, IMapper mapper, ICachingService cache)
+        public UpdateEmployeeCommandHandler(ILogger<UpdateEmployeeCommandHandler> logger, IUnitOfWork repository, IValidator<CreateEmployeeDTO> validator, IMapper mapper, ICachingService cache)
         {
             _repository = repository;
             _validator = validator;
@@ -41,9 +41,9 @@ namespace POSsystem.Core.Handlers.Commands
             _cache = cache;
         }
 
-        public async Task<EmployeeDTO> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<CreateEmployeeDTO> Handle(UpdateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            EmployeeDTO model = request.Model;
+            CreateEmployeeDTO model = request.Model;
             var id = request.Id;
 
             var result = _validator.Validate(model);
@@ -88,9 +88,9 @@ namespace POSsystem.Core.Handlers.Commands
             _repository.Employees.Update(employee);
             await _repository.CommitAsync();
 
-            var updatedEmployee = _mapper.Map<EmployeeDTO>(employee);
+            var updatedEmployee = _mapper.Map<CreateEmployeeDTO>(employee);
 
-            if (_cache.GetItem<EmployeeDTO>($"employee_{id}") != null)
+            if (_cache.GetItem<CreateEmployeeDTO>($"employee_{id}") != null)
             {
                 _logger.LogInformation($"Employee Exists in Cache. Set new Item for the same Key.");
                 _cache.SetItem($"employee_{id}", updatedEmployee);

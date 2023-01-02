@@ -5,10 +5,10 @@ using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Core.Validators
 {
-    public class EmployeeDTOValidator : AbstractValidator<EmployeeDTO>
+    public class CreateEmployeeDTOValidator : AbstractValidator<CreateEmployeeDTO>
     {
         private readonly IUnitOfWork _repository;
-        public EmployeeDTOValidator(IUnitOfWork repository)
+        public CreateEmployeeDTOValidator(IUnitOfWork repository)
         {
             _repository = repository;
             

@@ -12,23 +12,23 @@ using POSsystem.Core.Services;
 
 namespace POSsystem.Core.Handlers.Commands
 {
-    public class CreateEmployeeCommand : IRequest<EmployeeDTO>
+    public class CreateEmployeeCommand : IRequest<CreateEmployeeDTO>
     {
-        public EmployeeDTO Model { get; }
-        public CreateEmployeeCommand(EmployeeDTO model)
+        public CreateEmployeeDTO Model { get; }
+        public CreateEmployeeCommand(CreateEmployeeDTO model)
         {
             Model = model;
         }
     }
 
-    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, EmployeeDTO>
+    public class CreateEmployeeCommandHandler : IRequestHandler<CreateEmployeeCommand, CreateEmployeeDTO>
     {
         private readonly IUnitOfWork _repository;
-        private readonly IValidator<EmployeeDTO> _validator;
+        private readonly IValidator<CreateEmployeeDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateEmployeeCommandHandler> _logger;
 
-        public CreateEmployeeCommandHandler(ILogger<CreateEmployeeCommandHandler> logger, IUnitOfWork repository, IValidator<EmployeeDTO> validator, IMapper mapper)
+        public CreateEmployeeCommandHandler(ILogger<CreateEmployeeCommandHandler> logger, IUnitOfWork repository, IValidator<CreateEmployeeDTO> validator, IMapper mapper)
         {
             _repository = repository;
             _validator = validator;
@@ -36,9 +36,9 @@ namespace POSsystem.Core.Handlers.Commands
             _logger = logger;
         }
 
-        public async Task<EmployeeDTO> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
+        public async Task<CreateEmployeeDTO> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
         {
-            EmployeeDTO model = request.Model;
+            CreateEmployeeDTO model = request.Model;
 
             var result = _validator.Validate(model);
 
@@ -66,6 +66,7 @@ namespace POSsystem.Core.Handlers.Commands
             };
 
             _repository.Users.Add(user);
+            await _repository.CommitAsync();
 
             entities = _repository.Users.GetAll().Where(x => x.EmailAddress == model.EmailAddress);
             if (!entities.Any()) throw new EntityNotFoundException($"An user with the email address {model.EmailAddress} could not be found.");

@@ -5,7 +5,7 @@ using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Core.Validators
 {
-    public class OrderDTOValidator : AbstractValidator<OrderDTO>
+    public class OrderDTOValidator : AbstractValidator<CreateOrderDTO>
     {
         private readonly IUnitOfWork _repository;
         public OrderDTOValidator(IUnitOfWork repository)
@@ -23,8 +23,6 @@ namespace POSsystem.Core.Validators
             RuleFor(x => x.EmployeeId).NotEmpty().WithMessage("Employee Id must be specified");
             RuleFor(x => _repository.Employees.Get(x.EmployeeId)).NotNull()
                 .WithMessage("An employee with the id specified could not be found");
-            RuleFor(x => x.DiscountId).NotEqual(x => _repository.Discounts.Get(x.DiscountId).Id)
-                .WithMessage("Specified discount id is incorrect");
             RuleFor(x => x.Products).Must(x => x.All(id => _repository.Items.Get(id) != null))
                 .WithMessage("Specified product id is incorrect");
             RuleFor(x => x.Services).Must(x => x.All(id => _repository.Services.Get(id) != null))
