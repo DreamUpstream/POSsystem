@@ -9,6 +9,8 @@ namespace POSsystem.Core.Mapper
         public AutoMapperProfile()
         {
             CreateMap<Item, ItemDTO>();
+            CreateMap<Branch, BranchDTO>();
+            CreateMap<BranchWorkingDay, BranchWorkingDayDTO>();
         }
     }
 }

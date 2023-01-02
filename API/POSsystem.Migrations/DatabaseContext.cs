@@ -51,5 +51,6 @@ namespace POSsystem.Migrations
         public DbSet<ServiceReservation> ServiceReservations { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<BranchWorkingDay> BranchWorkingDays { get; set; }
     }
 }

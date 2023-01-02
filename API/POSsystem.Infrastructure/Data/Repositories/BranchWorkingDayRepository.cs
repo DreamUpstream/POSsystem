@@ -4,9 +4,9 @@ using POSsystem.Migrations;
 
 namespace POSsystem.Core.Data.Repositories;
 
-public class BranchWorkingDaysRepository : Repository<BranchWorkingDays>, IBranchWorkingDaysRepository
+public class BranchWorkingDayRepository : Repository<BranchWorkingDay>, IBranchWorkingDayRepository
 {
-    public BranchWorkingDaysRepository(DatabaseContext context) : base(context)
+    public BranchWorkingDayRepository(DatabaseContext context) : base(context)
     {
         
     }

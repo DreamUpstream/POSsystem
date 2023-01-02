@@ -5,7 +5,7 @@ namespace POSsystem.Contracts.Data
     public interface IUnitOfWork
     {
         IBranchRepository Branches { get; }
-        IBranchWorkingDaysRepository WorkingDays { get; }
+        IBranchWorkingDayRepository BranchWorkingDays { get; }
         ICompanyRepository Companies { get; }
         ICustomerRepository Customers { get; }
         IDiscountRepository Discounts { get; }
