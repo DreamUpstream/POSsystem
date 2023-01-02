@@ -18,7 +18,7 @@ public class Order : AuditableEntity
     [ForeignKey("employees")]
     public int EmployeeId { get; set; }
     [ForeignKey("discounts")]
-    public int DiscountId { get; set; }
+    public int? DiscountId { get; set; }
     [AllowNull]
     public string Delivery { get; set; }
     public List<Item> Products { get; set; }
