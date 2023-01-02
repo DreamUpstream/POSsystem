@@ -51,59 +51,5 @@ namespace POSsystem.Migrations
         public DbSet<ServiceReservation> ServiceReservations { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<User> Users { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder) 
-        {
-            modelBuilder.Entity<User>().HasData(new User 
-            {
-                Id = 1,
-                Created = DateTime.UtcNow,
-                EmailAddress = "user1@user.com",
-                Role = Contracts.Enum.UserRole.Employee,
-                Password = "",
-                Salt = new byte[0]
-            });
-            
-            modelBuilder.Entity<Employee>().HasData(new Employee 
-            {
-                Id = 1,
-                CreatedBy = "DbContext",
-                Name = "Employee1",
-                UserId = 1,
-                RegisteredDate = DateTime.UtcNow,
-                Status = Contracts.Enum.EmployeeStatus.Active,
-                CompanyId = 1
-            });
-            
-            modelBuilder.Entity<Service>().HasData(new Service
-            {
-                Id = 1,
-                CreatedBy = "DbContext",
-                Name = "Service1",
-                Description = "Service1",
-                Price = 1,
-                Duration = 1,
-                Type = 0,
-                Status = Contracts.Enum.ServiceStatus.Available,
-                DiscountId = 1,
-                BranchId = 1
-            });
-
-            modelBuilder.Entity<Order>().HasData(new Order
-            {
-                Id = 1,
-                CreatedBy = "DbContext",
-                SubmissionDate = DateTime.UtcNow,
-                FulfilmentDate = DateTime.UtcNow,
-                Tip = 1,
-                DeliveryRequired = false,
-                Comment = "",
-                Status = Contracts.Enum.OrderStatus.Created,
-                CustomerId = 1,
-                EmployeeId = 1,
-                DiscountId = 1,
-                Delivery = ""
-            });
-        }
     }
 }
