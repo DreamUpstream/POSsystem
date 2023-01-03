@@ -85,3 +85,20 @@ Response -> 201 {
     "created": "2022-12-11T21:21:46.570839Z"
 }
 ```
+
+# Swagger interface
+The application uses Swagger interface, to conveniently send HTTP requests to the API.
+
+In order to use the application, send POST request to Auth/Token with request body containing JSON:
+```
+{
+    "email": admin@admin.com,
+    "password": admin
+}
+```
+
+Copy the access token from the response and click Authorize.
+
+In the input field enter `Bearer `and the access token, received from the POST request.
+
+Locked padlock icons indicate, which requests are authorized.

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using POSsystem.Contracts.Data.Entities;
+using POSsystem.Contracts.Enum;
 using POSsystem.Contracts.Services;
 
 namespace POSsystem.Migrations
@@ -62,7 +63,7 @@ namespace POSsystem.Migrations
                 Name = "Employee1",
                 UserId = 1,
                 RegisteredDate = DateTime.UtcNow,
-                Status = Contracts.Enum.EmployeeStatus.Active,
+                Status = EmployeeStatus.Active,
                 CompanyId = 1
             });
 
@@ -89,11 +90,118 @@ namespace POSsystem.Migrations
                 Tip = 1,
                 DeliveryRequired = false,
                 Comment = "",
-                Status = Contracts.Enum.OrderStatus.Created,
+                Status = OrderStatus.Created,
                 CustomerId = 1,
                 EmployeeId = 1,
                 DiscountId = 1,
                 Delivery = ""
+            });
+
+            modelBuilder.Entity<Discount>().HasData(new Discount
+            {
+                Id = 1,
+                CreatedBy = "DbContext",
+                Amount = 10,
+                Measure = DiscountMeasure.Money,
+                PromoCode = "PROMO42",
+                StartTime = DateTime.Now,
+                EndTime = DateTime.Now.Add(TimeSpan.FromDays(30))
+            });
+
+            modelBuilder.Entity<Branch>().HasData(new Branch
+            {
+                Id = 1,
+                Address = "Savanoriu pr. 1, Vilnius",
+                Contacts = "maistas@admin.com",
+                BranchStatus = BranchStatus.Closed,
+                CompanyId = 1
+            });
+
+            modelBuilder.Entity<Company>().HasData(new Company
+            {
+                Id = 1,
+                Name = "The food company inc."
+            });
+
+            modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
+            {
+                WorkingDay = WorkingDay.Friday,
+                WorkingHoursStart = DateTime.Now,
+                WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
+                BranchId = 1
+            });
+            
+            modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
+            {
+                WorkingDay = WorkingDay.Monday,
+                WorkingHoursStart = DateTime.Now,
+                WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
+                BranchId = 1
+            });
+            
+            modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
+            {
+                WorkingDay = WorkingDay.Wednesday,
+                WorkingHoursStart = DateTime.Now,
+                WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
+                BranchId = 1
+            });
+
+            modelBuilder.Entity<Customer>().HasData(new Customer
+            {
+                Id = 1,
+                Name = "Jane",
+                PhoneNumber = "1111111111",
+                UserId = 1,
+                RegisteredDate = DateTime.Now,
+                Status = CustomerStatus.Active,
+                DiscountId = 1
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 1,
+                EmailAddress = "email@trustable_email_service.ll",
+                Role = UserRole.Base,
+                Password = "password",
+            });
+
+            modelBuilder.Entity<Service>().HasData(new Service()
+            {
+                Name = "Service",
+                Description = "Descripotion",
+                Price = new decimal(20.99),
+                Duration = 1,
+                Type = ServiceType.Default,
+                Status = ServiceStatus.Available,
+                DiscountId = 1,
+                BranchId = 1
+            });
+
+            modelBuilder.Entity<ServiceReservation>().HasData(new ServiceReservation
+            {
+                Time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
+                ReservationStatus = ReservationStatus.Registered,
+                ServiceId = 1,
+                TaxId = 22,
+                OrderId = 1,
+                EmployeeId = 1
+            });
+
+            modelBuilder.Entity<Item>().HasData(new Item
+            {
+                Price = new decimal(9.99),
+                Name = "name",
+                Description = "Description",
+                Status = ItemStatus.Available,
+                CategoryId = 1,
+                DiscountId = 1,
+                ColorCode = "#ff0011"
+            });
+
+            modelBuilder.Entity<ItemCategory>().HasData(new ItemCategory
+            {
+                Name = "Category 1"
             });
         }
     }
