@@ -20,7 +20,7 @@ namespace POSsystem.Core.Data.Repositories
             return _dbSet.Add(entity).Entity;
         }
 
-        public int Count()
+        public int Count() 
         {
             return _dbSet.Count();
         }

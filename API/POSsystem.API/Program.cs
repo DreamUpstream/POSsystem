@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using POSsystem.Core.Services;
 
 namespace POSsystem
 {
@@ -24,11 +26,14 @@ namespace POSsystem
             {
                 Task.Run(async () =>
                 {
+                    var salt = RandomNumberGenerator.GetBytes(128 / 8);
                     await db.Users.AddAsync(new Contracts.Data.Entities.User
                     {
                         EmailAddress = "admin@admin.com",
-                        Password = "admin",
-                        Role = Contracts.Enum.UserRole.Owner
+                        Salt = salt,
+                        Password = PasswordHashingService.Hash("admin", salt),
+                        Role = Contracts.Enum.UserRole.Owner,
+                        
                     });
                     await db.SaveChangesAsync();
                 });

@@ -11,8 +11,8 @@ using POSsystem.Migrations;
 namespace POSsystem.Migrations.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20221215183659_ExtendedDatabase")]
-    partial class ExtendedDatabase
+    [Migration("20230102222622_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,9 +30,6 @@ namespace POSsystem.Migrations.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("BranchStatus")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("BranchWorkingDaysId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CompanyId")
@@ -55,25 +52,18 @@ namespace POSsystem.Migrations.Migrations
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("WorkingHoursEnd")
-                        .HasColumnType("TEXT");
-
-                    b.Property<TimeSpan>("WorkingHoursStart")
-                        .HasColumnType("TEXT");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchWorkingDaysId");
-
-                    b.HasIndex("CompanyId");
 
                     b.ToTable("Branches");
                 });
 
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.BranchWorkingDays", b =>
+            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.BranchWorkingDay", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("BranchId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
@@ -91,6 +81,12 @@ namespace POSsystem.Migrations.Migrations
 
                     b.Property<int>("WorkingDay")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("WorkingHoursEnd")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("WorkingHoursStart")
+                        .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
@@ -125,6 +121,50 @@ namespace POSsystem.Migrations.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RegisteredDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
+                });
+
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Discount", b =>
                 {
                     b.Property<int>("Id")
@@ -141,7 +181,7 @@ namespace POSsystem.Migrations.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("EndTime")
+                    b.Property<DateTime>("EndTime")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LastModified")
@@ -157,12 +197,65 @@ namespace POSsystem.Migrations.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<TimeSpan>("StartTime")
+                    b.Property<DateTime>("StartTime")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
                     b.ToTable("Discounts");
+                });
+
+            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("RegisteredDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Employees");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CompanyId = 1,
+                            Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedBy = "DbContext",
+                            Name = "Employee1",
+                            RegisteredDate = new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7377),
+                            Status = 1,
+                            UserId = 1
+                        });
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Item", b =>
@@ -177,133 +270,6 @@ namespace POSsystem.Migrations.Migrations
                     b.Property<string>("ColorCode")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.ItemCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ItemCategory");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("Created")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Delivery")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("DeliveryRequired")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("EmployeeId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset>("FulfilmentDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTimeOffset>("SubmissionDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("Tip")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.PurchasableItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
@@ -340,13 +306,83 @@ namespace POSsystem.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("DiscountId");
-
                     b.HasIndex("OrderId");
 
-                    b.ToTable("PurchasableItems");
+                    b.ToTable("Items");
+                });
+
+            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Delivery")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("DeliveryRequired")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("DiscountId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FulfilmentDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("Tip")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Comment = "",
+                            Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedBy = "DbContext",
+                            CustomerId = 1,
+                            Delivery = "",
+                            DeliveryRequired = false,
+                            DiscountId = 1,
+                            EmployeeId = 1,
+                            FulfilmentDate = new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7785),
+                            Status = 1,
+                            SubmissionDate = new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7784),
+                            Tip = 1m
+                        });
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Service", b =>
@@ -399,13 +435,25 @@ namespace POSsystem.Migrations.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BranchId");
-
-                    b.HasIndex("DiscountId");
-
                     b.HasIndex("OrderId");
 
                     b.ToTable("Services");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BranchId = 1,
+                            Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            CreatedBy = "DbContext",
+                            Description = "Service1",
+                            DiscountId = 1,
+                            Duration = 1,
+                            Name = "Service1",
+                            Price = 1m,
+                            Status = 1,
+                            Type = 0
+                        });
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.ServiceReservation", b =>
@@ -439,19 +487,14 @@ namespace POSsystem.Migrations.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<long>("TaxId")
+                    b.Property<int>("TaxId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTimeOffset>("Time")
+                    b.Property<string>("Time")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ServiceId");
 
                     b.ToTable("ServiceReservations");
                 });
@@ -465,10 +508,6 @@ namespace POSsystem.Migrations.Migrations
                     b.Property<DateTime>("Created")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -480,218 +519,27 @@ namespace POSsystem.Migrations.Migrations
                     b.Property<int>("Role")
                         .HasColumnType("INTEGER");
 
+                    b.Property<byte[]>("Salt")
+                        .IsRequired()
+                        .HasColumnType("BLOB");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("User");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Customer", b =>
-                {
-                    b.HasBaseType("POSsystem.Contracts.Data.Entities.User");
-
-                    b.Property<int>("DiscountId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Customer_Name");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("RegisteredDate")
-                        .HasColumnType("TEXT")
-                        .HasColumnName("Customer_RegisteredDate");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER")
-                        .HasColumnName("Customer_Status");
-
-                    b.HasIndex("DiscountId");
-
-                    b.HasDiscriminator().HasValue("Customer");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Employee", b =>
-                {
-                    b.HasBaseType("POSsystem.Contracts.Data.Entities.User");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTimeOffset>("RegisteredDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("INTEGER");
-
-                    b.HasIndex("CompanyId");
-
-                    b.HasDiscriminator().HasValue("Employee");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Branch", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.BranchWorkingDays", "BranchWorkingDays")
-                        .WithMany()
-                        .HasForeignKey("BranchWorkingDaysId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BranchWorkingDays");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Item", b =>
                 {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.ItemCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Order", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Discount");
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.PurchasableItem", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.ItemCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("POSsystem.Contracts.Data.Entities.Order", null)
                         .WithMany("Products")
                         .HasForeignKey("OrderId");
-
-                    b.Navigation("Category");
-
-                    b.Navigation("Discount");
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Service", b =>
                 {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Branch", "Branch")
-                        .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("POSsystem.Contracts.Data.Entities.Order", null)
                         .WithMany("Services")
                         .HasForeignKey("OrderId");
-
-                    b.Navigation("Branch");
-
-                    b.Navigation("Discount");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.ServiceReservation", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Service", "Service")
-                        .WithMany()
-                        .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Service");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Customer", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Discount", "Discount")
-                        .WithMany()
-                        .HasForeignKey("DiscountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Discount");
-                });
-
-            modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Employee", b =>
-                {
-                    b.HasOne("POSsystem.Contracts.Data.Entities.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("POSsystem.Contracts.Data.Entities.Order", b =>
