@@ -5,7 +5,9 @@ using POSsystem.Contracts.Data.Entities;
 using FluentValidation;
 using POSsystem.Core.Exceptions;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using POSsystem.Contracts.Enum;
 using POSsystem.Core.Validators;
 
@@ -26,13 +28,15 @@ namespace POSsystem.Core.Handlers.Commands
         private readonly IValidator<CreateOrUpdateBranchDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateBranchCommandHandler> _logger;
+        private readonly IDistributedCache _cache;
 
-        public CreateBranchCommandHandler(ILogger<CreateBranchCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateBranchDTOValidator validator, IMapper mapper)
+        public CreateBranchCommandHandler(ILogger<CreateBranchCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateBranchDTOValidator validator, IMapper mapper, IDistributedCache cache)
         {
             _repository = repository;
             _validator = validator;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<BranchDTO> Handle(CreateBranchCommand request, CancellationToken cancellationToken)
@@ -88,6 +92,10 @@ namespace POSsystem.Core.Handlers.Commands
                     Errors = new string[1]{e.ToString()}
                 };
             }
+            
+            _logger.LogInformation($"Updating Branch cache.");
+            var updatedEntities = await Task.FromResult(_repository.Branches.GetAll());
+            await _cache.SetStringAsync("all_branches", JsonConvert.SerializeObject(_mapper.Map<IEnumerable<BranchDTO>>(updatedEntities)));
             
 
             return _mapper.Map<BranchDTO>(entity);

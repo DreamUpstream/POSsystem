@@ -1,9 +1,11 @@
 using System.Security.Cryptography;
-using FluentValidation.Results;
 using AutoMapper;
 using FluentValidation;
+using FluentValidation.Results;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using POSsystem.Contracts.Data;
 using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.DTO;
@@ -29,13 +31,15 @@ namespace POSsystem.Core.Handlers.Commands
         private readonly IValidator<CreateOrUpdateCustomerDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateCustomerCommandHandler> _logger;
+        private readonly IDistributedCache _cache;
     
-        public CreateCustomerCommandHandler(ILogger<CreateCustomerCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateCustomerDTOValidator validator, IMapper mapper)
+        public CreateCustomerCommandHandler(ILogger<CreateCustomerCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateCustomerDTOValidator validator, IMapper mapper, IDistributedCache cache)
         {
             _repository = repository;
             _validator = validator;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<CustomerDTO> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
@@ -93,6 +97,10 @@ namespace POSsystem.Core.Handlers.Commands
                     Errors = new string[1]{e.ToString()}
                 };
             }
+            _logger.LogInformation($"Updating Customer cache.");
+            var updatedEntities = await Task.FromResult(_repository.Customers.GetAll());
+            await _cache.SetStringAsync("all_customers", JsonConvert.SerializeObject(_mapper.Map<IEnumerable<CustomerDTO>>(updatedEntities)));
+            
             return _mapper.Map<CustomerDTO>(dbEntity);
         }
 
