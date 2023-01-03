@@ -15,10 +15,12 @@ namespace POSsystem.Core.Data.Repositories
             _dbSet = _context.Set<T>();
         }
 
+        
         public T Add(T entity)
         {
             return _dbSet.Add(entity).Entity;
         }
+        
 
         public int Count() 
         {

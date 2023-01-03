@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.Enum;
@@ -111,6 +112,7 @@ namespace POSsystem.Migrations
             modelBuilder.Entity<Branch>().HasData(new Branch
             {
                 Id = 1,
+                CreatedBy = "DbContext",
                 Address = "Savanoriu pr. 1, Vilnius",
                 Contacts = "maistas@admin.com",
                 BranchStatus = BranchStatus.Closed,
@@ -120,11 +122,14 @@ namespace POSsystem.Migrations
             modelBuilder.Entity<Company>().HasData(new Company
             {
                 Id = 1,
+                CreatedBy = "DbContext",
                 Name = "The food company inc."
             });
 
             modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
             {
+                Id = 1,
+                CreatedBy = "DbContext",
                 WorkingDay = WorkingDay.Friday,
                 WorkingHoursStart = DateTime.Now,
                 WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
@@ -133,6 +138,8 @@ namespace POSsystem.Migrations
             
             modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
             {
+                Id = 2,
+                CreatedBy = "DbContext",
                 WorkingDay = WorkingDay.Monday,
                 WorkingHoursStart = DateTime.Now,
                 WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
@@ -141,6 +148,8 @@ namespace POSsystem.Migrations
             
             modelBuilder.Entity<BranchWorkingDay>().HasData(new BranchWorkingDay
             {
+                Id = 3,
+                CreatedBy = "DbContext",
                 WorkingDay = WorkingDay.Wednesday,
                 WorkingHoursStart = DateTime.Now,
                 WorkingHoursEnd = DateTime.Now.Add(TimeSpan.FromHours(10)),
@@ -149,6 +158,7 @@ namespace POSsystem.Migrations
 
             modelBuilder.Entity<Customer>().HasData(new Customer
             {
+                CreatedBy = "DbContext",
                 Id = 1,
                 Name = "Jane",
                 PhoneNumber = "1111111111",
@@ -164,10 +174,13 @@ namespace POSsystem.Migrations
                 EmailAddress = "email@trustable_email_service.ll",
                 Role = UserRole.Base,
                 Password = "password",
+                Salt = RandomNumberGenerator.GetBytes(128 / 8)
             });
 
             modelBuilder.Entity<Service>().HasData(new Service()
             {
+                Id = 5,
+                CreatedBy = "DbContext",
                 Name = "Service",
                 Description = "Descripotion",
                 Price = new decimal(20.99),
@@ -180,6 +193,8 @@ namespace POSsystem.Migrations
 
             modelBuilder.Entity<ServiceReservation>().HasData(new ServiceReservation
             {
+                Id = 1,
+                CreatedBy = "DbContext",
                 Time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss"),
                 ReservationStatus = ReservationStatus.Registered,
                 ServiceId = 1,
@@ -190,6 +205,8 @@ namespace POSsystem.Migrations
 
             modelBuilder.Entity<Item>().HasData(new Item
             {
+                Id = 1,
+                CreatedBy = "DbContext",
                 Price = new decimal(9.99),
                 Name = "name",
                 Description = "Description",
@@ -201,6 +218,8 @@ namespace POSsystem.Migrations
 
             modelBuilder.Entity<ItemCategory>().HasData(new ItemCategory
             {
+                Id = 1,
+                CreatedBy = "DbContext",
                 Name = "Category 1"
             });
         }
