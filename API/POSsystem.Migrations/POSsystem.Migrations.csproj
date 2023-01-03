@@ -18,4 +18,8 @@
 	  <ProjectReference Include="..\POSsystem.Contracts\POSsystem.Contracts.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Migrations" />
+	</ItemGroup>
+
 </Project>

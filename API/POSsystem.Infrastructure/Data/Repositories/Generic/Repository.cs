@@ -22,7 +22,7 @@ namespace POSsystem.Core.Data.Repositories
         }
         
 
-        public int Count()
+        public int Count() 
         {
             return _dbSet.Count();
         }

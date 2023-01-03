@@ -65,7 +65,7 @@ namespace POSsystem.Core.Handlers.Commands
 
             dbEntity.Name = model.Name;
             dbEntity.Description = model.Description;
-            dbEntity.Category = _repository.ItemCategories.Get(model.CategoryId);
+            dbEntity.CategoryId = model.CategoryId;
             dbEntity.ColorCode = model.ColorCode;
 
             _repository.Items.Update(dbEntity);

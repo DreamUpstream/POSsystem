@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using POSsystem.API.Filters;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using POSsystem.Contracts.Constants;
 using POSsystem.Contracts.DTO;
 using POSsystem.Core.Exceptions;
 using POSsystem.Core.Handlers.Commands;
 using POSsystem.Core.Handlers.Queries;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 
 namespace POSsystem.Controllers.V1
 {
@@ -74,7 +73,6 @@ namespace POSsystem.Controllers.V1
         [MapToApiVersion("1.0")]
         [HttpPut]
         [Route("{id}")]
-        [TypeFilter(typeof(ETagFilter))]
         [ProducesResponseType(typeof(CreateOrUpdateItemDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> Update(int id, [FromBody] CreateOrUpdateItemDTO model)
@@ -106,7 +104,6 @@ namespace POSsystem.Controllers.V1
         [MapToApiVersion("1.0")]
         [HttpGet]
         [Route("{id}")]
-        [TypeFilter(typeof(ETagFilter))]
         [ProducesResponseType(typeof(ItemDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> GetById(int id)

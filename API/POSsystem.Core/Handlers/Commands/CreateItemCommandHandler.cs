@@ -5,7 +5,9 @@ using POSsystem.Contracts.Data.Entities;
 using FluentValidation;
 using POSsystem.Core.Exceptions;
 using AutoMapper;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace POSsystem.Core.Handlers.Commands
 {
@@ -14,7 +16,7 @@ namespace POSsystem.Core.Handlers.Commands
         public CreateOrUpdateItemDTO Model { get; }
         public CreateItemCommand(CreateOrUpdateItemDTO model)
         {
-            this.Model = model;
+            Model = model;
         }
     }
 
@@ -24,13 +26,15 @@ namespace POSsystem.Core.Handlers.Commands
         private readonly IValidator<CreateOrUpdateItemDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ILogger<CreateItemCommandHandler> _logger;
+        private readonly IDistributedCache _cache;
 
-        public CreateItemCommandHandler(ILogger<CreateItemCommandHandler> logger, IUnitOfWork repository, IValidator<CreateOrUpdateItemDTO> validator, IMapper mapper)
+        public CreateItemCommandHandler(ILogger<CreateItemCommandHandler> logger, IUnitOfWork repository, IValidator<CreateOrUpdateItemDTO> validator, IMapper mapper, IDistributedCache cache)
         {
             _repository = repository;
             _validator = validator;
             _mapper = mapper;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<ItemDTO> Handle(CreateItemCommand request, CancellationToken cancellationToken)
@@ -54,12 +58,16 @@ namespace POSsystem.Core.Handlers.Commands
             {
                 Name = model.Name,
                 Description = model.Description,
-                Category = _repository.ItemCategories.Get(model.CategoryId),
+                CategoryId = model.CategoryId,
                 ColorCode = model.ColorCode
             };
-
+            
             _repository.Items.Add(entity);
             await _repository.CommitAsync();
+            
+            _logger.LogInformation($"Updating Item cache.");
+            var updatedEntities = await Task.FromResult(_repository.Items.GetAll());
+            await _cache.SetStringAsync("all_items", JsonConvert.SerializeObject(_mapper.Map<IEnumerable<ItemDTO>>(updatedEntities)));
 
             return _mapper.Map<ItemDTO>(entity);
         }
