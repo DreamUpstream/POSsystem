@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace POSsystem.API.Controllers.V1
 {
-    // [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
+    [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
@@ -41,7 +41,6 @@ namespace POSsystem.API.Controllers.V1
         [MapToApiVersion("1.0")]
         [HttpGet]
         [Route("{id}")]
-        [TypeFilter(typeof(ETagFilter))]
         [ProducesResponseType(typeof(BranchDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> GetById(int id)
@@ -65,12 +64,12 @@ namespace POSsystem.API.Controllers.V1
         [HttpPost, Route ("create")]
         [ProducesResponseType(typeof(BranchDTO), (int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Post([FromBody] CreateOrUpdateBranchDTO model)//public async Task<IActionResult> Post([FromBody] BranchDTO model)
+        public async Task<IActionResult> Post([FromBody] CreateOrUpdateBranchDTO model)
         {
             try
             {
 
-                var command = new CreateBranchCommand(model);//var command = new CreateBranchCommand(model);
+                var command = new CreateBranchCommand(model);
                 var response = await _mediator.Send(command);
                 return StatusCode((int)HttpStatusCode.Created, response);
             }
@@ -83,7 +82,67 @@ namespace POSsystem.API.Controllers.V1
                 });
             }
         }
+        [MapToApiVersion("1.0")]
+        [HttpDelete]
+        [Route("{id}")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(BaseResponseDTO))]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try 
+            {
+                var command = new DeleteBranchCommand(id);
+                var deletedId = await _mediator.Send(command);
+            }
+            catch (InvalidRequestBodyException ex)
+            {
+                return BadRequest(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = ex.Errors
+                });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = new[] { ex.Message }
+                });
+            }
+            return Ok();
+        }
         
+        [MapToApiVersion("1.0")]
+        [HttpPut]
+        [Route("{id}/update")]
+        [ProducesResponseType(typeof(CreateOrUpdateBranchDTO), (int)HttpStatusCode.OK)]
+        [ProducesErrorResponseType(typeof(BaseResponseDTO))]
+        public async Task<IActionResult> Update(int id, [FromBody] CreateOrUpdateBranchDTO model)
+        {
+            try
+            {
+                var command = new UpdateBranchCommand(model, id);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (InvalidRequestBodyException ex)
+            {
+                return BadRequest(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = ex.Errors
+                });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = new string[] { ex.Message }
+                });
+            }
+        }
     }
     
  
