@@ -13,6 +13,7 @@ namespace POSsystem.Core.Mapper
             CreateMap<ServiceReservation, ServiceReservationDTO>();
             CreateMap<Branch, BranchDTO>();
             CreateMap<BranchWorkingDay, BranchWorkingDayDTO>();
+            CreateMap<Customer, CustomerDTO>();
         }
     }
 }

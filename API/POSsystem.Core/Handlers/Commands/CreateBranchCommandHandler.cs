@@ -63,7 +63,7 @@ namespace POSsystem.Core.Handlers.Commands
                 {
                     Address = model.Address,
                     Contacts = model.Contacts,
-                    BranchStatus = model.Status,
+                    BranchStatus = model.BranchStatus,
                     CompanyId = model.CompanyId
                 };
                 
