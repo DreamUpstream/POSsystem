@@ -2,6 +2,6 @@ namespace POSsystem.Contracts.Enum;
 
 public enum CustomerStatus
 {
-    Active = 1,
-    Inactive = 0
+    Active = 2,
+    Inactive = 1
 }
