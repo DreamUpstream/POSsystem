@@ -1,21 +1,35 @@
 using FluentValidation;
+using POSsystem.Contracts.Data;
 using POSsystem.Contracts.DTO;
+using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Core.Validators
 {
     public class CreateOrUpdateBranchDTOValidator : AbstractValidator<CreateOrUpdateBranchDTO>
     {
-        public CreateOrUpdateBranchDTOValidator()
+        private readonly IUnitOfWork _repository;
+        public CreateOrUpdateBranchDTOValidator(IUnitOfWork repository)
         {
+            _repository = repository;
             RuleFor(x => x.Address).NotEmpty().WithMessage("Address is required");
-            RuleFor(x=>x.Status).NotEmpty().WithMessage("Status is required");
             RuleFor(x=>x.Contacts).NotEmpty().WithMessage("Contacts is required"); 
-            RuleFor(x=>x.BranchWorkingDays).NotEmpty().WithMessage("Branch working days are required");
+            RuleFor(x=>(BranchStatus)x.Status).IsInEnum().WithMessage("Status is incorrect");
+
+            RuleFor(x=>x.CompanyId).NotEmpty().WithMessage("Company id is required");
+            RuleFor(x => _repository.Companies.Get(x.CompanyId)).NotNull()
+                .WithMessage("Existing Company id must be provided");
+            RuleFor(x => ValidateWorkingDays(x.BranchWorkingDays)).NotNull().WithMessage("Valid week days must be provided");
         }
-        private bool BeAValidDate(string value)
+        private bool? ValidateWorkingDays(IEnumerable<CreateOrUpdateBranchWorkingDayDTO> workingDays)
         {
-            DateTime date;
-            return DateTime.TryParse(value, out date);
+            foreach (var day in workingDays)
+            {
+                if (!Enum.IsDefined(typeof(WorkingDay), day.WorkingDay))
+                {
+                    return null;
+                }
+            }
+            return true;
         }
     }
 }
