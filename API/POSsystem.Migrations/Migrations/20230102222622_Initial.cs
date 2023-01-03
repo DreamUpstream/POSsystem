@@ -5,10 +5,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace POSsystem.Migrations.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Branches",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Address = table.Column<string>(type: "TEXT", nullable: false),
+                    Contacts = table.Column<string>(type: "TEXT", nullable: false),
+                    BranchStatus = table.Column<int>(type: "INTEGER", nullable: false),
+                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
+                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Branches", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "BranchWorkingDays",
                 columns: table => new
@@ -16,6 +36,9 @@ namespace POSsystem.Migrations.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     WorkingDay = table.Column<int>(type: "INTEGER", nullable: false),
+                    WorkingHoursStart = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    WorkingHoursEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    BranchId = table.Column<int>(type: "INTEGER", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
@@ -54,7 +77,7 @@ namespace POSsystem.Migrations.Migrations
                     UserId = table.Column<int>(type: "INTEGER", nullable: false),
                     RegisteredDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
-                    Discount = table.Column<int>(type: "INTEGER", nullable: false),
+                    DiscountId = table.Column<int>(type: "INTEGER", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
                     CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
                     ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
@@ -139,10 +162,10 @@ namespace POSsystem.Migrations.Migrations
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Time = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Time = table.Column<string>(type: "TEXT", nullable: false),
                     Status = table.Column<int>(type: "INTEGER", nullable: false),
                     ServiceId = table.Column<int>(type: "INTEGER", nullable: false),
-                    TaxId = table.Column<long>(type: "INTEGER", nullable: false),
+                    TaxId = table.Column<int>(type: "INTEGER", nullable: false),
                     OrderId = table.Column<int>(type: "INTEGER", nullable: false),
                     EmployeeId = table.Column<int>(type: "INTEGER", nullable: false),
                     Created = table.Column<DateTime>(type: "TEXT", nullable: false),
@@ -170,35 +193,6 @@ namespace POSsystem.Migrations.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Branches",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Address = table.Column<string>(type: "TEXT", nullable: false),
-                    WorkingHoursStart = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    WorkingHoursEnd = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    BranchWorkingDaysId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Contacts = table.Column<string>(type: "TEXT", nullable: false),
-                    BranchStatus = table.Column<int>(type: "INTEGER", nullable: false),
-                    CompanyId = table.Column<int>(type: "INTEGER", nullable: false),
-                    Created = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    CreatedBy = table.Column<string>(type: "TEXT", nullable: false),
-                    ModifiedBy = table.Column<string>(type: "TEXT", nullable: true),
-                    LastModified = table.Column<DateTime>(type: "TEXT", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Branches", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Branches_BranchWorkingDays_BranchWorkingDaysId",
-                        column: x => x.BranchWorkingDaysId,
-                        principalTable: "BranchWorkingDays",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -260,10 +254,20 @@ namespace POSsystem.Migrations.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Branches_BranchWorkingDaysId",
-                table: "Branches",
-                column: "BranchWorkingDaysId");
+            migrationBuilder.InsertData(
+                table: "Employees",
+                columns: new[] { "Id", "CompanyId", "Created", "CreatedBy", "LastModified", "ModifiedBy", "Name", "RegisteredDate", "Status", "UserId" },
+                values: new object[] { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "DbContext", null, null, "Employee1", new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7377), 1, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Orders",
+                columns: new[] { "Id", "Comment", "Created", "CreatedBy", "CustomerId", "Delivery", "DeliveryRequired", "DiscountId", "EmployeeId", "FulfilmentDate", "LastModified", "ModifiedBy", "Status", "SubmissionDate", "Tip" },
+                values: new object[] { 1, "", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "DbContext", 1, "", false, 1, 1, new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7785), null, null, 1, new DateTime(2023, 1, 2, 22, 26, 21, 923, DateTimeKind.Utc).AddTicks(7784), 1m });
+
+            migrationBuilder.InsertData(
+                table: "Services",
+                columns: new[] { "Id", "BranchId", "Created", "CreatedBy", "Description", "DiscountId", "Duration", "LastModified", "ModifiedBy", "Name", "OrderId", "Price", "Status", "Type" },
+                values: new object[] { 1, 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "DbContext", "Service1", 1, 1, null, null, "Service1", null, 1m, 1, 0 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Items_OrderId",
@@ -280,6 +284,9 @@ namespace POSsystem.Migrations.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Branches");
+
+            migrationBuilder.DropTable(
+                name: "BranchWorkingDays");
 
             migrationBuilder.DropTable(
                 name: "Companies");
@@ -304,9 +311,6 @@ namespace POSsystem.Migrations.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "BranchWorkingDays");
 
             migrationBuilder.DropTable(
                 name: "Orders");

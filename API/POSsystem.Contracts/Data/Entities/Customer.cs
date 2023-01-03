@@ -12,5 +12,5 @@ public class Customer : AuditableEntity
     public DateTime RegisteredDate { get; set; }
     public CustomerStatus Status { get; set; }
     [ForeignKey("discounts")]
-    public int Discount { get; set; }
+    public int DiscountId { get; set; }
 }

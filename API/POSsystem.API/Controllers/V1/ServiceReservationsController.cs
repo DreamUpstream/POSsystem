@@ -50,7 +50,6 @@ namespace POSsystem.Controllers.V1
         [MapToApiVersion("1.0")]
         [HttpGet]
         [Route("{id}")]
-        [TypeFilter(typeof(ETagFilter))]
         [ProducesResponseType(typeof(ServiceReservationDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> GetById(int id)
@@ -96,7 +95,6 @@ namespace POSsystem.Controllers.V1
         [MapToApiVersion("1.0")]
         [HttpPut]
         [Route("{id}")]
-        [TypeFilter(typeof(ETagFilter))]
         [ProducesResponseType(typeof(ServiceReservationDTO), (int) HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> Update(int id, [FromBody] CreateOrUpdateServiceReservationDTO model)

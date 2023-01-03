@@ -5,5 +5,5 @@ public enum ReservationStatus
     Registered = 1,
     ChangedTime = 2,
     Completed = 3,
-    Submitted = 5
+    Submitted = 4
 }
