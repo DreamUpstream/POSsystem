@@ -5,10 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Remove="config.ncconf" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
@@ -24,6 +20,13 @@
 	  <None Update="client.ncconf">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
+	  <None Update="config.ncconf">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="ClientLogs" />
 	</ItemGroup>
 
 

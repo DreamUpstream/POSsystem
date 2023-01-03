@@ -1,13 +1,15 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using POSsystem.Contracts.Enum;
 
 namespace POSsystem.Contracts.Data.Entities;
 
-public class Employee : BaseEntity
+public class Employee : AuditableEntity
 {
     public string Name { get; set; }
-    public User User { get; set; }
+    [ForeignKey("users")]
+    public int UserId { get; set; }
     public DateTime RegisteredDate { get; set; }
     public EmployeeStatus Status { get; set; }
-    public UserRole UserRole { get; set; }
-    public Company Company { get; set; }
+    [ForeignKey("companies")]
+    public int CompanyId { get; set; }
 }

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace POSsystem.Contracts.Data.Entities
 {
     public abstract class BaseEntity
