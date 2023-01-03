@@ -7,8 +7,8 @@ public class CustomerDTO : BaseEntity
 {
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
-    public CreateOrUpdateUserDTO User { get; set; }
+    public int UserId { get; set; }
     public DateTime RegisteredDate { get; set; }
     public CustomerStatus Status { get; set; }
-    public int Discount { get; set; }
+    public int DiscountId { get; set; }
 }

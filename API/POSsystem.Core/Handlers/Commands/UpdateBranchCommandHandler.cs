@@ -102,7 +102,7 @@ namespace POSsystem.Core.Handlers.Commands
                 }
                 dbEntity.Address = model.Address;
                 dbEntity.Contacts = model.Contacts;
-                dbEntity.BranchStatus = model.Status;
+                dbEntity.BranchStatus = model.BranchStatus;
                 dbEntity.CompanyId = model.CompanyId;
             }
             catch (Exception e)
