@@ -1,16 +1,14 @@
-using System.ComponentModel.DataAnnotations.Schema;
+using POSsystem.Contracts.Data.Entities;
 using POSsystem.Contracts.Enum;
 
-namespace POSsystem.Contracts.Data.Entities;
+namespace POSsystem.Contracts.DTO;
 
-public class Customer : AuditableEntity
+public class CustomerDTO : BaseEntity
 {
     public string Name { get; set; }
     public string PhoneNumber { get; set; }
-    [ForeignKey("users")]
     public int UserId { get; set; }
     public DateTime RegisteredDate { get; set; }
     public CustomerStatus Status { get; set; }
-    [ForeignKey("discounts")]
     public int DiscountId { get; set; }
 }

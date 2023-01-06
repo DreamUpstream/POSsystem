@@ -18,7 +18,6 @@ public class GetServiceReservationsByStatusQuery : IRequest<IEnumerable<ServiceR
     }
 }
 
-
 public class GetServiceReservationsByStatusQueryHandler : IRequestHandler<GetServiceReservationsByStatusQuery, IEnumerable<ServiceReservationDTO>>
 {
     private readonly IUnitOfWork _repository;
@@ -41,7 +40,7 @@ public class GetServiceReservationsByStatusQueryHandler : IRequestHandler<GetSer
         if (cachedEntitiesString == null)
         {
             _logger.LogInformation($"ServiceReservation list by status {request.ServiceReservationStatus} doesn't exist in Cache.");
-            var entities = await Task.FromResult(_repository.ServiceReservations.GetAll().Where(reservation => (int)reservation.Status == request.ServiceReservationStatus));
+            var entities = await Task.FromResult(_repository.ServiceReservations.GetAll().Where(reservation => (int)reservation.ReservationStatus == request.ServiceReservationStatus));
             var result = _mapper.Map<IEnumerable<ServiceReservationDTO>>(entities);
 
             _logger.LogInformation($"Add ServiceReservations with status {request.ServiceReservationStatus} to Cache and return.");

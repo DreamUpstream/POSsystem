@@ -1,62 +1,53 @@
-
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Alachisoft.NCache.Common.Util;
-using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using POSsystem.API.Filters;
 using POSsystem.Contracts.Constants;
 using POSsystem.Contracts.DTO;
 using POSsystem.Core.Exceptions;
 using POSsystem.Core.Handlers.Commands;
 using POSsystem.Core.Handlers.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace POSsystem.Controllers.V1
+namespace POSsystem.API.Controllers.V1
 {
     [Authorize(Roles = $"{UserRoles.Owner},{UserRoles.Admin}")]
     [ApiController]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
-    public class ServiceReservationsController : ControllerBase
+
+    public class BranchController : ControllerBase
     {
         private readonly IMediator _mediator;
-
-        public ServiceReservationsController(IMediator mediator)
+        
+        public BranchController(IMediator mediator)
         {
             _mediator = mediator;
         }
-
+        
         [MapToApiVersion("1.0")]
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ServiceReservationDTO>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<BranchDTO>), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Get([FromQuery] int reservationStatus)
+        public async Task<IActionResult> Get()
         {
-            if (reservationStatus == 0)
-            {
-                var getAllQuery = new GetAllServiceReservationsQuery();
-                var getAllResponse = await _mediator.Send(getAllQuery);
-                return Ok(getAllResponse);
-            }
-            
-            var getByStatusQuery = new GetServiceReservationsByStatusQuery(reservationStatus);
-            var getByStatusReponse = await _mediator.Send(getByStatusQuery);
-            return Ok(getByStatusReponse);
+            var query = new GetAllBranchesQuery();
+            var response = await _mediator.Send(query);
+            return Ok(response);
         }
         
         [MapToApiVersion("1.0")]
         [HttpGet]
         [Route("{id}")]
-        [ProducesResponseType(typeof(ServiceReservationDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(BranchDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
         public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var query = new GetServiceReservationByIdQuery(id);
+                var query = new GetBranchByIdQuery(id);
                 var response = await _mediator.Send(query);
                 return Ok(response);
             }
@@ -69,41 +60,39 @@ namespace POSsystem.Controllers.V1
                 });
             }
         }
-
         [MapToApiVersion("1.0")]
-        [HttpPost]
-        [ProducesResponseType(typeof(ServiceReservationDTO), (int) HttpStatusCode.Created)]
+        [HttpPost, Route ("create")]
+        [ProducesResponseType(typeof(BranchDTO), (int)HttpStatusCode.Created)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Post([FromBody] CreateOrUpdateServiceReservationDTO dto)
+        public async Task<IActionResult> Post([FromBody] CreateOrUpdateBranchDTO model)
         {
             try
             {
-                var command = new CreateServiceReservationCommand(dto);
+
+                var command = new CreateBranchCommand(model);
                 var response = await _mediator.Send(command);
-                return StatusCode((int) HttpStatusCode.Created, response);
+                return StatusCode((int)HttpStatusCode.Created, response);
             }
-            catch (InvalidRequestBodyException exception)
+            catch (InvalidRequestBodyException ex)
             {
                 return BadRequest(new BaseResponseDTO
                 {
                     IsSuccess = false,
-                    Errors = exception.Errors
+                    Errors = ex.Errors
                 });
             }
         }
-
         [MapToApiVersion("1.0")]
-        [HttpPut]
+        [HttpDelete]
         [Route("{id}")]
-        [ProducesResponseType(typeof(ServiceReservationDTO), (int) HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Update(int id, [FromBody] CreateOrUpdateServiceReservationDTO model)
+        public async Task<IActionResult> Delete(int id)
         {
-            try
+            try 
             {
-                var command = new UpdateServiceReservationCommand(id, model);
-                var response = await _mediator.Send(command);
-                return Ok(response);
+                var command = new DeleteBranchCommand(id);
+                var deletedId = await _mediator.Send(command);
             }
             catch (InvalidRequestBodyException ex)
             {
@@ -121,19 +110,40 @@ namespace POSsystem.Controllers.V1
                     Errors = new[] { ex.Message }
                 });
             }
+            return Ok();
         }
         
         [MapToApiVersion("1.0")]
-        [HttpDelete]
-        [Route("{id}")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [HttpPut]
+        [Route("{id}/update")]
+        [ProducesResponseType(typeof(CreateOrUpdateBranchDTO), (int)HttpStatusCode.OK)]
         [ProducesErrorResponseType(typeof(BaseResponseDTO))]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Update(int id, [FromBody] CreateOrUpdateBranchDTO model)
         {
-            var command = new DeleteServiceReservationCommand(id);
-            await _mediator.Send(command);
-            return Ok();
+            try
+            {
+                var command = new UpdateBranchCommand(model, id);
+                var response = await _mediator.Send(command);
+                return Ok(response);
+            }
+            catch (InvalidRequestBodyException ex)
+            {
+                return BadRequest(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = ex.Errors
+                });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(new BaseResponseDTO
+                {
+                    IsSuccess = false,
+                    Errors = new string[] { ex.Message }
+                });
+            }
         }
     }
+    
+ 
 }
-

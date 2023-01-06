@@ -9,7 +9,7 @@ namespace POSsystem.Contracts.Data.Entities
         public string Name { get; set; }
         public string Description { get; set; }
         public ItemStatus Status { get; set; }
-        [ForeignKey("categories")]
+        [ForeignKey("item_categories")]
         public int CategoryId { get; set; }
         [ForeignKey("discounts")]
         public int DiscountId { get; set; }

@@ -65,7 +65,7 @@ public class UpdateServiceReservationCommandHandler : IRequestHandler<UpdateServ
         }
 
         dbEntity.Time = model.Time.ToString("yyyy-MM-dd hh:mm:ss");
-        dbEntity.Status = (ReservationStatus) model.ReservationStatus;
+        dbEntity.ReservationStatus = model.ReservationStatus;
         dbEntity.ServiceId = model.ServiceId;
         dbEntity.TaxId = model.TaxId;
         dbEntity.OrderId = model.OrderId;
