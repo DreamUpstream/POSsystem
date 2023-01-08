@@ -3,9 +3,9 @@ using FluentValidation;
 
 namespace POSsystem.Core.Validators
 {
-    public class ValidateUserDTOValidator : AbstractValidator<ValidateUserDTO>
+    public class UserDTOValidator : AbstractValidator<ValidateUserDTO>
     {
-        public ValidateUserDTOValidator()
+        public UserDTOValidator()
         {
             RuleFor(x => x.EmailAddress).NotEmpty().WithMessage("EmailAddress is required");
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password is required");

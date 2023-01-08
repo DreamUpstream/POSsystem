@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using POSsystem.Contracts.Enum;
 
-namespace POSsystem.Contracts.Data.Entities;
+namespace POSsystem.Contracts.DTO;
 
-public class Service : AuditableEntity
+public class ServiceDTO
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -11,9 +10,6 @@ public class Service : AuditableEntity
     public int Duration { get; set; }
     public ServiceType Type { get; set; }
     public ServiceStatus Status { get; set; }
-    [ForeignKey("discounts")]
     public int DiscountId { get; set; }
-    [ForeignKey("branches")]
     public int BranchId { get; set; }
-    public Order? Order { get; set; }
 }

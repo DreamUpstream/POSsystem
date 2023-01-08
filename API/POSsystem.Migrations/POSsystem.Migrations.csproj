@@ -16,6 +16,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\POSsystem.Contracts\POSsystem.Contracts.csproj" />
+	  <ProjectReference Include="..\POSsystem.Core\POSsystem.Core.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

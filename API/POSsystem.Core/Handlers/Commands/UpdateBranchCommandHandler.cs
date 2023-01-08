@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using POSsystem.Contracts.Data;
 using POSsystem.Contracts.Data.Entities;
@@ -30,14 +31,16 @@ namespace POSsystem.Core.Handlers.Commands
         private readonly IValidator<CreateOrUpdateBranchDTO> _validator;
         private readonly IMapper _mapper;
         private readonly ICachingService _cache;
+        private readonly IDistributedCache _distributedCache;
         private readonly ILogger<UpdateBranchCommandHandler> _logger;
         
-        public UpdateBranchCommandHandler(ILogger<UpdateBranchCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateBranchDTOValidator validator, IMapper mapper, ICachingService cache)
+        public UpdateBranchCommandHandler(ILogger<UpdateBranchCommandHandler> logger, IUnitOfWork repository, CreateOrUpdateBranchDTOValidator validator, IMapper mapper, ICachingService cache, IDistributedCache distributedCache)
         {
             _repository = repository;
             _validator = validator;
             _mapper = mapper;
             _cache = cache;
+            _distributedCache = distributedCache;
             _logger = logger;
         }
 
@@ -125,6 +128,8 @@ namespace POSsystem.Core.Handlers.Commands
                 _logger.LogInformation($"Branch exists in Cache. Set new Branch for the same Key.");
                 _cache.SetItem($"branch_{branchId}", updatedBranch);
             }
+
+            await _distributedCache.RemoveAsync("all_branches");
 
             return updatedBranch;
         }

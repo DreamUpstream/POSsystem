@@ -14,6 +14,12 @@ namespace POSsystem.Core.Mapper
             CreateMap<Branch, BranchDTO>();
             CreateMap<BranchWorkingDay, BranchWorkingDayDTO>();
             CreateMap<Customer, CustomerDTO>();
+            CreateMap<Employee, EmployeeDTO>();
+            CreateMap<Employee, CreateEmployeeDTO>();
+            CreateMap<Discount, DiscountDTO>();
+            CreateMap<Order, CreateOrderDTO>();
+            CreateMap<Order, OrderDTO>();
+            CreateMap<Service, ServiceDTO>();
         }
     }
 }
